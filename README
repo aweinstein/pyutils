@@ -1,0 +1,6 @@
+Assorted utility functions.
+
+To make the modules available globally, add a file pyutils.pth to
+/usr/lib/python2.7/dist-packages. The file has contains the line 
+
+/home/ajw/local/pyutils/
