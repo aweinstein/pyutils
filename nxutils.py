@@ -1,4 +1,6 @@
+from math import sqrt
 import networkx as nx
+import matplotlib.pyplot as plt
 
 def plot_grid(G):
     '''Plot G in a grid.
@@ -6,10 +8,11 @@ def plot_grid(G):
     The nodes of G are assumed to be of the form (i,j). The (i,j) value is used
     to locate each node.
     '''
-    #TODO: Set the dimensions according to the size of the graph
     pos = dict(((i,j),(j,-i)) for i,j in G.nodes())
-    nx.draw(G, pos=pos, node_size=400, font_size=8, alpha=0.8)
-
+    nz = min(2000.0 / sqrt(len(G)), 400)
+    nx.draw(G, pos=pos, node_size=nz, font_size=0, alpha=0.8)
+    plt.axis('equal')
+    
 def random_walk(G, nodelist=None):
     '''Return the random walk matrix associated with the graph.
 
@@ -42,6 +45,7 @@ if __name__ == '__main__x':
     
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
-    G = nx.grid_2d_graph(5,8)
+    N = 10
+    G = nx.grid_2d_graph(N, N)
     plot_grid(G)
     plt.show()
