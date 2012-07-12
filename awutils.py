@@ -28,7 +28,7 @@ def test_choose():
         h[choose(a,p)] += 1
 
     for prob,e in zip(p,a):
-        print 'p:%f freq:%.2f' % (prob, float(h[e])/n)
+        print 'p: %.3f freq: %.2f' % (prob, float(h[e])/n)
 
 def test_progress():
     import time
