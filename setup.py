@@ -8,5 +8,5 @@ setup(name='pyutils',
       author_email='alejandro.weinstein@gmail.com',
       packages=packages,
       description='Some utility functions',
-      long_description=open('README.rst').read(),
+      long_description=open('README').read(),
       )
