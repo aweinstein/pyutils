@@ -1,6 +1,16 @@
-Assorted utility functions.
+Assorted utility functions
+==========================
+ 
+These are some assorted utility functions.
 
-To make the modules available globally, add a file pyutils.pth to
-/usr/lib/python2.7/dist-packages. The file contains the line
+.. code-block:: bash
 
-/home/ajw/local/pyutils/
+$ sudo python setup.py install
+
+or
+
+.. code-block:: bash
+
+$ sudo python setup.py develop
+
+should be sufficient to install this package.
