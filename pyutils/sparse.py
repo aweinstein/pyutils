@@ -28,14 +28,16 @@ def make_sparse_x(n, k):
     return x
 
 def make_group_sparse_x(n, k, J):
-    """Make a vector of length `n` and group sparsity `k`.
+    """Make a group sparse vector.
+
+    `x` is a group sparse vector of length `n` with `k`  groups of length `J`.
 
     The location of the `k` groups are chosen uniformly at random. The
     amplitude of the nonzero entries are iid drawn from a uniform distribution
-    in the interval [-2, -1] U [1,
+    in the interval [-2, -1] U [1, 2].
     """
     x = np.zeros((n, 1))
-    i = np.arange(0, n, J)
+    i = np.arange(0, n-1, J)
     np.random.shuffle(i)
     supp = i[:k]
     for j in range(J):
@@ -44,7 +46,7 @@ def make_group_sparse_x(n, k, J):
     return x
 
 def omp(A, y, epsilon=1e-3):
-    """Recover a sparse vector form linear observations.
+    """Recover a sparse vector from linear observations using OMP.
 
     Given `y = Ax` recover `x` using a naive implementation of OMP.
     
@@ -72,7 +74,7 @@ def omp(A, y, epsilon=1e-3):
     while norm(r) > epsilon:
         h = np.abs(np.dot(A.T, r))
         Delta.append(np.argmax(h))
-        alpha = np.dot(pinv(A[:,Delta]), y)
+        alpha = np.linalg.lstsq(A[:,Delta], y)[0]
         r = y - np.dot(A[:, Delta], alpha)
         k += 1
 
@@ -80,3 +82,52 @@ def omp(A, y, epsilon=1e-3):
     x_hat[Delta] = alpha
 
     return x_hat
+
+def bomp(A, y, J, epsilon=1e-3):
+    """Recover a sparse vector from linear observations using BOMP.
+
+    Given `y = Ax` recover `x` using a naive implementation of BOMP.
+    
+    Parameter
+    ---------
+    A : array, shape = (m, n)
+        Matrix representing the linear operator
+    y : array, shape = (m, 1)
+        Linear observations
+    J : integer
+        Length of each group
+    epsilon : float, optional
+        Stoping condintion is ||residue|| < epsilon
+
+    Return
+    ------
+    x_hat : array, shape = (n, 1)
+        Estimate of x
+
+    Note: This is a naive inefficient implementation of OMP. For an efficient
+    implementation see the scikit-learn implementation (http://bit.ly/Re4NJt)
+    """
+    n = A.shape[1]
+    r = y.copy()
+    k = 1
+    I = [] # Group indices
+    Iv = np.zeros(n, 'bool') # Vector indices
+    nJ = n / J # Number of groups
+    _gs = lambda j,J=J: slice(j*J,(j+1)*J)
+
+    while norm(r) > epsilon:
+        h = np.zeros(nJ)
+        for j in range(nJ):
+             h[j] = norm(np.dot(A[:,_gs(j)].T, r))
+        i_star = np.argmax(h)
+        I.append(i_star)
+        Iv[_gs(i_star)] = True
+        alpha = np.linalg.lstsq(A[:,Iv], y)[0]
+        r = y - np.dot(A[:, Iv], alpha)
+
+    x_hat = np.zeros((n, 1))
+    x_hat[Iv] = alpha
+
+    return x_hat
+
+    
