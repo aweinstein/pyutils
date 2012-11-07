@@ -1,1 +1,1 @@
-from pyutils import awutils, nxutils, pltutils, sparse
+from pyutils import general, nx, plot, sparse

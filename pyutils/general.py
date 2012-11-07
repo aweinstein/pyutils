@@ -12,7 +12,7 @@ def choose(a, p):
     a : list
     p : probability mass function
     '''
-    # TDOO Raise an exception if len(a) != len(p) or if sum(p)~= 1
+    # TODO: Raise an exception if len(a) != len(p) or if sum(p)~= 1
     intervals = [sum(p[:i]) for i in range(len(p))]
     item = a[bisect.bisect(intervals, random.random()) - 1]
     return item
