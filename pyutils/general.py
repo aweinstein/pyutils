@@ -1,6 +1,19 @@
 import bisect
 import random
 import sys
+import functools
+
+# From http://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
+# note that this decorator ignores **kwargs
+def memoize(obj):
+    cache = obj.cache = {}
+
+    @functools.wraps(obj)
+    def memoizer(*args, **kwargs):
+        if args not in cache:
+            cache[args] = obj(*args, **kwargs)
+        return cache[args]
+    return memoizer
 
 def progress(msg):
     sys.stdout.write('\r' + msg)
