@@ -20,15 +20,29 @@ def progress(msg):
     sys.stdout.flush()
 
 def choose(a, p):
-    '''Choose randomly an item from `a` with pmf given by p.
+    """Choose randomly an item from `a` with pmf given by p.
 
     a : list
     p : probability mass function
-    '''
+    """
     # TODO: Raise an exception if len(a) != len(p) or if sum(p)~= 1
     intervals = [sum(p[:i]) for i in range(len(p))]
     item = a[bisect.bisect(intervals, random.random()) - 1]
     return item
+
+def factors(value):
+    """List all the factors of an integer.
+
+    Source:
+    http://stackoverflow.com/a/5505024/349087
+    """
+    if value < 1:
+        return []
+    factors = [(1, value)]
+    for i in range(2, int(value**0.5)+1):
+        if value % i == 0:
+            factors.append((i, value / i))
+    return factors
 
 def test_choose():
     print 'Testing choose'
