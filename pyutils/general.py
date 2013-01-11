@@ -44,6 +44,28 @@ def factors(value):
             factors.append((i, value / i))
     return factors
 
+def call(argv, locals):
+    """Call function contained in argv.
+
+    argv : list with the command line arguments, typically sys.argv
+    locals : dictionary with module variables
+
+    This function try to call named `argv[1]`, such that executing
+
+    $ python foo.py f1
+
+    will, if it exists, function `f1` defined in foo.py.
+    """
+
+    if len(sys.argv) == 2:
+        fname = sys.argv[1]
+        if locals.has_key(fname) and hasattr(locals[fname], '__call__'):
+            locals[fname]()
+        else:
+            print 'Function %s does not exist' % fname
+    else:
+        print 'Wrong number of arguments.'
+
 def test_choose():
     print 'Testing choose'
     from collections import defaultdict
