@@ -57,7 +57,7 @@ def call(argv, locals):
     will, if it exists, function `f1` defined in foo.py.
     """
 
-    if len(sys.argv) == 2:
+    if len(sys.argv) >= 2:
         fname = sys.argv[1]
         if locals.has_key(fname) and hasattr(locals[fname], '__call__'):
             locals[fname]()
