@@ -3,9 +3,13 @@ import random
 import sys
 import functools
 
-# From http://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
-# note that this decorator ignores **kwargs
 def memoize(obj):
+    """Memoize decorator.
+
+    Note: The decorator ignores **kwargs.
+
+    Source: http://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
+    """
     cache = obj.cache = {}
 
     @functools.wraps(obj)
