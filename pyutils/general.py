@@ -59,6 +59,11 @@ def call(argv, locals):
     $ python foo.py f1
 
     will, if it exists, function `f1` defined in foo.py.
+
+    Usage:
+
+    if __name__ == '__main__':
+        call(sys.argv, locals())
     """
 
     if len(sys.argv) >= 2:
